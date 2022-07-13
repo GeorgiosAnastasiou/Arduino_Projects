@@ -68,10 +68,10 @@ int distance;
 const byte ROWS = 4; //four rows
 const byte COLS = 4; //four columns
 char keys[ROWS][COLS] = {
-  {'1','4','7','A'},
-  {'2','5','8','B'},
-  {'3','6','9','C'},
-  {'0','#','*','-'}
+  {'-','9','5','1'},
+  {'*','0','6','2'},
+  {'/','A','7','3'},
+  {'#','B','8','4'}
 };
 byte rowPins[ROWS] = {5, 4, 3, 2}; //connect to the row pinouts of the keypad
 byte colPins[COLS] = {9, 8, 7, 6}; //connect to the column pinouts of the keypad
@@ -79,20 +79,21 @@ byte colPins[COLS] = {9, 8, 7, 6}; //connect to the column pinouts of the keypad
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
 
+// Generally, you should use "unsigned long" for variables that hold time
+// The value will quickly become too large for an int to store
+unsigned long previousMillis = 0;        // will store last time LED was updated
+
+// constants won't change:
+const long interval = 15000;           // interval at which to blink (milliseconds)
+
 void setup()
 {
   lcd.init();                      // initialize the lcd 
   lcd.init();
   // Print a message to the LCD.
   lcd.backlight();
-  lcd.setCursor(3,0);
-  lcd.print("Hello, world!");
-  lcd.setCursor(2,1);
-  lcd.print("Ywrobot Arduino!");
-  lcd.setCursor(0,2);
-  lcd.print("Arduino LCM IIC 2004");
-  lcd.setCursor(2,3);
-  lcd.print("Power By Ec-yuan!");
+  lcd.setCursor(2,0);
+  lcd.print("Hello, world");
   Serial.begin(9600);
 
 }
@@ -101,6 +102,7 @@ char PWD[8];
 int ctr=0; //counter
 int mltplr = 1;
 char A_PWD[8] = {'0','1','2','3','4','5','6','7'};
+
 
 void loop() {
   // Pass INC as a parameter to get the distance in inches
@@ -113,6 +115,9 @@ void loop() {
   //Serial.println(distance);
   //delay(100);
   if(distance < 200){
+    if(previousMillis == 0){
+      previousMillis = millis();
+    }
     if(key){
       if(ctr > 8){
         ctr = 0;
@@ -138,47 +143,63 @@ void loop() {
         lcd.clear();  
         lcd.setCursor(0,0);
         keyprev = 'F';
+        previousMillis = 0;
       }
       else if(key == '#'){
-        mltplr = 1;
-        Serial.println(ctr);
-        if(ctr != 8){
-          mltplr = 0;
-        }
-        else{ 
-          mltplr = 1;
-          for(int ctr2=0; ctr2 < ctr ; ctr2++){
-             if( PWD[ctr2] == A_PWD[ctr2]){
-               mltplr *= 1;
-             }
-             else mltplr=0 ;
-             //lcd.setCursor(ctr2,0);
-             //lcd.print("*");
-             Serial.print(mltplr);
-             Serial.print(" ");
-             Serial.print(PWD[ctr2]);
-             Serial.print(" ");
-             Serial.println(A_PWD[ctr2]);
-          }
-        }
-        
-        if (mltplr != 0){
+        unsigned long currentMillis = millis();
+        if (currentMillis - previousMillis >= interval) {
           lcd.clear();
           lcd.setCursor(4,0);
-          lcd.print("Password");
-          lcd.setCursor(4,1);
-          lcd.print("Correct!");
-          keyprev = 'F';
-          delay(3000);
-        }
-        else {
-          lcd.clear();
-          lcd.setCursor(1,0);
-          lcd.print("Wrong Password");
+          lcd.print("You took");
+          lcd.setCursor(0,1);
+          lcd.print("too long. SUS!");
           ctr = 0;
           mltplr = 1;
           keyprev = 'F';
-          delay(3000);
+          previousMillis = 0;
+        }
+        else{
+          mltplr = 1;
+          Serial.println(ctr);
+          if(ctr != 8){
+            mltplr = 0;
+          }
+          else{ 
+            mltplr = 1;
+            for(int ctr2=0; ctr2 < ctr ; ctr2++){
+               if( PWD[ctr2] == A_PWD[ctr2]){
+                 mltplr *= 1;
+               }
+               else mltplr=0 ;
+               //lcd.setCursor(ctr2,0);
+               //lcd.print("*");
+               Serial.print(mltplr);
+               Serial.print(" ");
+               Serial.print(PWD[ctr2]);
+               Serial.print(" ");
+               Serial.println(A_PWD[ctr2]);
+            }
+          }
+          
+          if (mltplr != 0){
+            lcd.clear();
+            lcd.setCursor(4,0);
+            lcd.print("Password");
+            lcd.setCursor(4,1);
+            lcd.print("Correct!");
+            keyprev = 'F';
+            //delay(3000);
+          }
+          else {
+            lcd.clear();
+            lcd.setCursor(1,0);
+            lcd.print("Wrong Password");
+            ctr = 0;
+            mltplr = 1;
+            keyprev = 'F';
+            //delay(3000);
+          }
+          previousMillis = 0;
         }
       }
     }
