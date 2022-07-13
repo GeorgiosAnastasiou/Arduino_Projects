@@ -22,18 +22,24 @@ Pins --
     
 Keypad INPUT -> OUTPUT:
   S1 -> 1
-  S2 -> 4
-  S3 -> 7
-  S4 -> A
-  S5 -> 2
-  S6 -> 5
-  S7 -> 8
-  S8 -> B
-  S9 -> 3
-  S10 -> 6
-  S11 -> 9
-  S12 -> C
-  S13 -> 0
-  S14 -> #
-  S15 -> *
-  S16 -> -
+  S2 -> 2
+  S3 -> 3
+  S4 -> 4
+  S5 -> 5
+  S6 -> 6
+  S7 -> 7
+  S8 -> 8
+  S9 -> 9
+  S10 -> 0
+  S11 -> A
+  S12 -> B
+  S13 -> -
+  S14 -> *
+  S15 -> /
+  S16 -> #
+  
+  Go close to the sensor (within 2 metres) 
+  and within 15 seconds type the correct password
+  else the system locks
+  '-' deletes written text
+  '#' submits password
