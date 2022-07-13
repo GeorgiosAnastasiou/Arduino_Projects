@@ -1,0 +1,39 @@
+Used -- 
+  Arduino UNO
+  QAPASS LCD (16x2) with I2C Module
+  A 4x4 Keypad
+  HC-SR04 Ultrasonic Module Distance Sensor
+  
+Pins --
+  QAPASS Screen --
+    GND -> GND
+    VCC -> 5V
+    SDA -> A4
+    SCL -> A5
+    
+  4x4 Keypad --
+    First to Last pins (8 pins) -> D2 to D9
+    
+  HC-SR04 Sensor --
+    VCC -> 5V
+    TRIG -> D12
+    ECHO -> D13
+    GND -> GND
+    
+Keypad INPUT -> OUTPUT:
+  S1 -> 1
+  S2 -> 4
+  S3 -> 7
+  S4 -> A
+  S5 -> 2
+  S6 -> 5
+  S7 -> 8
+  S8 -> B
+  S9 -> 3
+  S10 -> 6
+  S11 -> 9
+  S12 -> C
+  S13 -> 0
+  S14 -> #
+  S15 -> *
+  S16 -> -
